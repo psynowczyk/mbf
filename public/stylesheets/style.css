@@ -1,8 +1,37 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+html									{width: 100%; height: 100%;}
+body 									{margin: 0px; padding: 0px; width: 100%; height: 100%; font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;}
+body *								{float: left;}
+	
+	form									{margin: 0px; padding: 0px; width: 100%;}
+		.inputs_box						{width: calc(100% - 32px); padding: 10px 15px; background-color: #ededed; border: 1px solid #cccccc; border-top: 1px solid #bfbfbf; border-radius: 3px; box-shadow: 0px 1px 0px #ffffff;}
+			.input_box					{margin-top: 10px; width: 100%;}
+			.input_box:first-child	{margin-top: 0;}
+			.label						{width: 100%;}
+			.form_errors_box			{width: 100%;}
+				ul.form_errors			{display: none; margin: 0 0 0 15px; padding: 7px 15px; width: calc(100% - 47px); color: #ffffff; background-color: #bf1413; text-shadow: 0px -1px 0px #b31312; border: 1px solid #b31312; border-radius: 3px;}
+					li.form_error_elem	{margin: 4px 0 4px 10px; padding: 0; width: calc(100% - 10px);}
+			.file_input_status		{width: 100%; color: #bf1413;}
+	input[type="text"],
+	input[type="password"]			{padding: 0 0 0 5px; width: calc(100% - 7px); height: 26px; border: 1px solid #cccccc; border-radius: 2px;}
+	input[type="submit"]				{font-family: inherit; font-size: 14px; padding: 5px 16px; background-color: #262626; border: 1px solid #000000; border-radius: 2px; color: #f7f7f7;}
+	input[type="submit"]:hover		{cursor: pointer; background-color: #000000; color: #00d4ff;}
+	input[type="submit"][disabled="disabled"]	{background-color: #99100f; color: #ffffff;}
+	a										{text-decoration: none; color: inherit;}
+	.sitetitle							{font-size: 30px; margin-bottom: 20px; width: 100%; border-bottom: 1px solid #cccccc; box-shadow: 0px 1px 0px #ffffff;}
+	.title								{font-size: 20px; width: 100%;}
 
-a {
-  color: #00B7FF;
-}
+
+	#menu_box						{display: flex; justify-content: center; position: fixed; z-index: 1; width: 100%; height: 44px; line-height: 44px; background-color: #262626; border-bottom: 1px solid #000000; color: #f7f7f7;}
+		#menu							{width: 100%; max-width: 1100px; min-width: 600px; height: 100%;}
+			.menu_elem				{padding: 0px 22px; height: 100%;}
+			.menu_elem:hover		{padding: 0px 21px; border-left: 1px solid #333333; border-right: 1px solid #333333; background-color: #000000; color: #00d4ff; cursor: pointer;}
+			#logged_box				{float: right;}
+	#banner_box						{padding-top: 45px; width: 100%; height: 250px; background-image: url(../images/bg.png); background-repeat: no-repeat; background-size: cover; background-position: center center;}
+	#content_box					{display: flex; justify-content: center; width: 100%; min-height: calc(100% - 341px); background-color: #f2f2f2; border-top: 1px solid #ffffff; color: #080808; text-shadow: 0px 1px 0px #ffffff;}
+		#content						{padding: 15px 0; width: 100%; max-width: 1100px; min-width: 600px; height: calc(100% - 30px);}
+			.login_box				{display: flex; justify-content: center; width: 50%;}
+				.login_box form	{width: 70%;}
+			.editprofile_box		{width: 100%;}
+				.editprofile_box form	{width: 50%;}
+				.editprofile_box	.form_errors_box	{width: 50%;}
+	#footer_box						{display: flex; justify-content: center; width: 100%; height: 44px; background-color: #262626; border-top: 1px solid #000000; color: #f7f7f7;}

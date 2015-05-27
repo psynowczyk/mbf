@@ -1,0 +1,34 @@
+extends layout
+
+block content
+	div(class="sitetitle")= title
+	div(class="login_box")
+		form(action="/login", method="post", autocomplete="off")
+			div(class="title") Log in
+			div(class="inputs_box")
+				div(class='input_box')
+					div(class='label') Login
+					input(type='text', name='login', placeholder='login', required='required')
+				div(class='input_box')
+					div(class='label') Password
+					input(type='text', name='password', placeholder='password', required='required')
+				div(class='input_box')
+					input(type="submit", value="Log in")
+	div(class="login_box")
+		form(action="/signup", method="post", autocomplete="off")
+			div(class="title") Sign up
+			div(class="inputs_box")
+				div(class='input_box')
+					div(class='label') Username
+					input(type='text', name='username', placeholder='username', required='required')
+				div(class='input_box')
+					div(class='label') Login
+					input(type='text', name='login', placeholder='login', required='required')
+				div(class='input_box')
+					div(class='label') Password
+					input(type='password', name='password', placeholder='password', required='required')
+				div(class='input_box')
+					div(class='label') Repeat password
+					input(type='password', name='repassword', placeholder='password', required='required')
+				div(class='input_box')
+					input(type="submit", value="Sign up")

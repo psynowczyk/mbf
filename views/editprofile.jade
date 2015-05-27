@@ -1,0 +1,28 @@
+extends layout
+
+block content
+	div(class="sitetitle")= title
+	div(class="editprofile_box" ng-app="editprofile", ng-controller="EditProfileController")
+		form(action="/editprofile", method="post", autocomplete="off", enctype="multipart/form-data")
+			div(class="inputs_box")
+				div(class='input_box')
+					div(class='label') New login
+					input(type='text', name='login', placeholder=login, ng-model='user.login', ng-model-options='{ debounce: 600 }', ng-change='validate_login()')
+				div(class='input_box')
+					div(class='label') New password
+					input(type='password', name='password', placeholder='password', ng-model='user.password', ng-model-options='{ debounce: 600 }', ng-change='validate_password()')
+				div(class='input_box')
+					div(class='label') Repeat password
+					input(type='password', name='repassword', placeholder='password', ng-model='user.repassword', ng-model-options='{ debounce: 600 }', ng-change='validate_password()')
+				div(class='input_box')
+					div(class='label') Username
+					input(type='text', name='username', placeholder=username, ng-model='user.username', ng-model-options='{ debounce: 600 }', ng-change='validate_username()')
+				div(class='input_box')
+					div(class='label') Avatar
+					input(type='file', accept='image/*', name='avatar', ng-model='user.avatar')
+					div(class="file_input_status", data-id="avatar")
+				div(class='input_box')
+					input(type="submit", name="editprofile_save", value="Save")
+		div(class="form_errors_box")
+			ul(class='form_errors', data-id='editprofile')
+				li(class="form_error_elem", ng-repeat="e in errors") {{e}}
