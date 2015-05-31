@@ -6,6 +6,7 @@ module.exports = function (app, passport) {
 	app.get('*', function (req, res, next) {
 		
 		res.locals.loggedIn = (req.user) ? true : false;
+		if (req.isAuthenticated()) res.locals.avatar = req.user.local.avatar || 'noavatar.png';
 		if (req.isAuthenticated()) res.locals.username = req.user.local.username || null;
 		if (req.isAuthenticated()) res.locals.usertype = req.user.local.usertype || null;
 		
@@ -30,59 +31,66 @@ module.exports = function (app, passport) {
 		res.render('editprofile', { 'title': 'Edit profile', 'login': req.user.local.login });
 	});
 	// EDIT PROFILE
-	app.post('/editprofile_pi', isLoggedIn, function (req, res) {
+	app.post('/editprofile_both', isLoggedIn, function (req, res, next) {
 		var fstream;
-		var allowedext = ['jpg', 'jpeg', 'png', 'gif'];
-		function clearpath (id, callback) {
-			fs.unlink('public/images/avatars/'+ id +'.'+ allowedext[0], function() {
-				fs.unlink('public/images/avatars/'+ id +'.'+ allowedext[1], function() {
-					fs.unlink('public/images/avatars/'+ id +'.'+ allowedext[2], function() {
-						fs.unlink('public/images/avatars/'+ id +'.'+ allowedext[3], function() {
-							callback();
-						});
-					});
-				});
-			});
-		}
+		var vp = { $set: { local: req.user.local } };
+
 		function generatename (filename) {
 			var ext = filename.split('.');
 			ext = ext[ext.length - 1];
-			if (allowedext.indexOf(ext) != -1) return req.user.id + '.' + ext;
-			else return false;
+			return req.user.id + '.' + ext;
 		}
+
 		req.pipe(req.busboy);
-		req.busboy.on('field', function (key, value) {
-			if(key == 'username') {
-				User.update({'_id': req.user._id}, 
-					{$set: { 'local.username': value }},
-					function (err) {
-						if (err) console.log(err);
-					}
-				);
-			}
-		});
 		req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-			console.log(mimetype);
+			if (!filename) return;
 			var newfilename = generatename(filename);
 			if (newfilename != false) {
-				clearpath(req.user._id, function () {
+				fs.unlink('public/images/avatars/'+ req.user.local.avatar, function() {
 					fstream = fs.createWriteStream('public/images/avatars/'+ newfilename);
 					file.pipe(fstream);
-					fstream.on('close', function () {    
-	               User.update({ '_id': req.user._id },
-							{$set: { 'local.avatar': newfilename }}, function (err) {
-								if (err) console.log(err);
-							}
-						);
-	            });
+					fstream.on('close', function () {
+						User.update({ '_id': req.user._id }, { $set: { 'local.avatar': newfilename }}, function (err) {
+							if (err) console.log(err);
+						});
+					});
 				});
 			}
-			else res.end();
 		});
+
+		req.busboy.on('field', function (key, value) {
+			if (value.length > 0) vp.$set.local[key] = value;
+		});
+
 		req.busboy.on('finish', function () {
-			res.redirect('/editprofile');
+			if (vp.$set.local.hasOwnProperty('password') && vp.$set.local.hasOwnProperty('repassword')) {
+				if (vp.$set.local.password == vp.$set.local.repassword) {
+					vp.$set.local.password = req.user.generateHash(vp.$set.local.password);
+				}
+				delete vp.$set.local.repassword;
+			}
+			User.update({ '_id': req.user._id }, vp, function (err) {
+				if (err) console.log(err);
+				res.end();
+			});
 		});
-		
+	});
+
+	app.post('/editprofile_data', isLoggedIn, function (req, res, next) {
+		var vp = { $set: { local: req.user.local } };
+
+		if (req.body.login) vp.$set.local.login = req.body.login;
+		if (req.body.username) vp.$set.local.username = req.body.username;
+		if (req.body.password && req.body.repassword) {
+			if (req.body.password == req.body.repassword) {
+				vp.$set.local.password = req.user.generateHash(req.body.password);
+			}
+		}
+
+		User.update({ '_id': req.user._id }, vp, function (err) {
+			if (err) console.log(err);
+			res.end();
+		});
 	});
 
 	// LOGIN
@@ -102,7 +110,7 @@ module.exports = function (app, passport) {
 	// LOGOUT
 	app.get('/logout', isLoggedIn, function (req, res) {
 		req.logout();
-		res.redirect('/');
+		res.redirect('/login');
 	});
 
 };

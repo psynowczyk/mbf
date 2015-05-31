@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
 		'usertype': {type: String, default: 'user'},
 		'acstatus': {type: String, default: 'useable'},
 		'registerdate': {type: Date, default: Date.now()},
-		'avatar': {type: String, default: 'noavatar.png'}
+		'avatar': {type: String, default: ''}
 	}
 });
 

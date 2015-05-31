@@ -10,13 +10,17 @@ head
 body(ng-app="mbfapp")
 	div(id="menu_box", ng-controller="SiteMenuController")
 		div(id="menu")
-			div
-				a(class="menu_elem", ng-repeat="m in menuelem", href="{{m.url}}") {{m.name}}
 			div(id="logged_box")
 				if (!loggedIn)
-					a(class="menu_elem", href="login") Login
+					a(class="menu_elem", href="login") Log in or Sign up
 				else
-					a(class="menu_elem", href="/logout") Logout
+					div(id="menu_avatar", style="background-image: url(/images/avatars/"+ avatar +");")
+					div(id="menu_usermenu_box")
+						div(id="menu_username")= username
+						div(id="menu_usermenu")
+							a(class="usermenu_elem", ng-repeat="m in usermenu", href="{{m.url}}") {{m.name}}
+			div(id="menu_list")
+				a(class="menu_elem", ng-repeat="m in menuelem", href="{{m.url}}") {{m.name}}
 	div(id="banner_box")
 	div(id="content_box")
 		div(id="content")

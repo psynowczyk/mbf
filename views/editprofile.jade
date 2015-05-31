@@ -3,7 +3,7 @@ extends layout
 block content
 	div(class="sitetitle")= title
 	div(class="editprofile_box" ng-app="editprofile", ng-controller="EditProfileController")
-		form(action="/editprofile", method="post", autocomplete="off", enctype="multipart/form-data")
+		form(action="/editprofile", method="post", autocomplete="off", enctype="multipart/form-data", id="editprofile")
 			div(class="inputs_box")
 				div(class='input_box')
 					div(class='label') New login
@@ -22,7 +22,7 @@ block content
 					input(type='file', accept='image/*', name='avatar', ng-model='user.avatar')
 					div(class="file_input_status", data-id="avatar")
 				div(class='input_box')
-					input(type="submit", name="editprofile_save", value="Save")
+					input(type="submit", data-id="editprofile_save", value="Save")
 		div(class="form_errors_box")
 			ul(class='form_errors', data-id='editprofile')
 				li(class="form_error_elem", ng-repeat="e in errors") {{e}}

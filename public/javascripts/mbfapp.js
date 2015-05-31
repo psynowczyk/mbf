@@ -6,19 +6,16 @@ mbfapp.controller('SiteMenuController', ['$scope', function($scope) {
 		2: {name: 'Forum', url: 'forum'},
 		3: {name: 'Gallery', url: 'gallery'}
 	};
+	$scope.usermenu = {
+		1: {name: 'edit profile', url: '/editprofile'},
+		2: {name: 'log out', url: '/logout'}
+	};
 }]);
 
 mbfapp.controller('EditProfileController', ['$scope', function($scope) {
-	// delete myJSONObject.regex;
+
 	$scope.errors = {};
-	/*
-	$scope.errors = {
-		login: '',
-		password: '',
-		repassword: '',
-		username: ''
-	};
-*/
+
 	function checkFormErrorsDisplay() {
 		if (
 			!$scope.errors.hasOwnProperty('login') &&
