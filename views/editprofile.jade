@@ -3,6 +3,7 @@ extends layout
 block content
 	div(class="sitetitle")= title
 	div(class="editprofile_box" ng-app="editprofile", ng-controller="EditProfileController")
+		customdirective()
 		form(action="/editprofile", method="post", autocomplete="off", enctype="multipart/form-data", id="editprofile")
 			div(class="inputs_box")
 				div(class='input_box')

@@ -1,4 +1,16 @@
-var mbfapp = angular.module('mbfapp', []);
+angular.module('mbfappserv', []).factory('justService', function() {
+
+	var compare_string = function (str1, str2) {
+		return str1 == str2;
+	};
+
+	return {
+		compare_string: compare_string
+	};
+
+});
+
+var mbfapp = angular.module('mbfapp', ['mbfappserv']);
 
 mbfapp.controller('SiteMenuController', ['$scope', function($scope) {
 	$scope.menuelem = {
@@ -12,9 +24,10 @@ mbfapp.controller('SiteMenuController', ['$scope', function($scope) {
 	};
 }]);
 
-mbfapp.controller('EditProfileController', ['$scope', function($scope) {
+mbfapp.controller('EditProfileController', ['$scope', 'justService', function($scope, justService) {
 
 	$scope.errors = {};
+	$scope.eo = '';
 
 	function checkFormErrorsDisplay() {
 		if (
@@ -23,8 +36,14 @@ mbfapp.controller('EditProfileController', ['$scope', function($scope) {
 			!$scope.errors.hasOwnProperty('repassword') &&
 			!$scope.errors.hasOwnProperty('username') &&
 			!$scope.errors.hasOwnProperty('avatar')
-		) $('ul.form_errors[data-id="editprofile"]').fadeOut(200);
-		else $('ul.form_errors[data-id="editprofile"]').fadeIn(200);
+		) {
+			$('ul.form_errors[data-id="editprofile"]').fadeOut(200);
+			$scope.eo = '';
+		}
+		else {
+			$scope.eo = 'There are some errors!';
+			$('ul.form_errors[data-id="editprofile"]').fadeIn(200);
+		}
 	}
 
 	$scope.validate_login = function() {
@@ -41,7 +60,7 @@ mbfapp.controller('EditProfileController', ['$scope', function($scope) {
 		}
 		else {
 			delete $scope.errors.password;
-			if ($scope.user.repassword.length > 0 && $scope.user.repassword != $scope.user.password) {
+			if ($scope.user.repassword.length > 0 && !justService.compare_string($scope.user.password, $scope.user.repassword)) {
 				$scope.errors.repassword = 'Passwords must match!';
 			}
 			else delete $scope.errors.repassword;
@@ -58,3 +77,9 @@ mbfapp.controller('EditProfileController', ['$scope', function($scope) {
 	};
 
 }]);
+
+mbfapp.directive('customdirective', function() {
+	return {
+		template: '{{eo}}'
+	};
+});
